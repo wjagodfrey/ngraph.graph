@@ -310,18 +310,24 @@ function createGraph(options) {
     var fromNode = getNode(fromId) || addNode(fromId);
     var toNode = getNode(toId) || addNode(toId);
 
-    var link = createLink(fromId, toId, data);
+    var link = getLink(fromId, toId);
+    if (!link) {
+      var link = createLink(fromId, toId, data);
 
-    links.push(link);
+      links.push(link);
 
-    // TODO: this is not cool. On large graphs potentially would consume more memory.
-    addLinkToNode(fromNode, link);
-    if (fromId !== toId) {
-      // make sure we are not duplicating links for self-loops
-      addLinkToNode(toNode, link);
+      // TODO: this is not cool. On large graphs potentially would consume more memory.
+      addLinkToNode(fromNode, link);
+      if (fromId !== toId) {
+        // make sure we are not duplicating links for self-loops
+        addLinkToNode(toNode, link);
+      }
+
+      recordLinkChange(link, 'add');
+    } else {
+      link.data = data
+      recordLinkChange(link, 'update');
     }
-
-    recordLinkChange(link, 'add');
 
     exitModification();
 
