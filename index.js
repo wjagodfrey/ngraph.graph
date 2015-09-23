@@ -59,6 +59,11 @@ function createGraph(options) {
 
   // this is our public API:
   var graphPart = {
+
+    // expose nodes and links
+    links: links,
+    nodes: nodes,
+
     /**
      * Adds node to the graph. If node with given id already exists in the graph
      * its data is extended with whatever comes in 'data' argument.
